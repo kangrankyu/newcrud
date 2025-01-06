@@ -1,10 +1,15 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useReducer, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Hamburger from "./Hamburger";
+import { useAuthstore } from "../stores/useAuthStore";
+import supabase from "../utils/supabase";
 
 const Header = () => {
-  const [user, setUser] = useState("false");
-  // const Navigate
+  const { user, clearUser } = useAuthstore();
+  const Navigate = useNavigate();
+  const HandleLogout = async () => {
+    let { error } = await supabase.auth.signOut();
+  };
   return (
     <div className="flex items-center  p-4  bg-white justify-between  rounded-md mb-1  ">
       {/* 로고 섹션  */}
@@ -18,23 +23,34 @@ const Header = () => {
         <>
           <div className=" hidden md:flex gap-2 mr-5">
             <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
-              마이페이지{user.neckname}
+              마이페이지
             </button>
-            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+            <button
+              onClick={HandleLogout}
+              className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            >
               로그아웃
             </button>
           </div>
-          <div className="block md:hidden">
-            <Hamburger />
-          </div>
+          <div className="block md:hidden">{/* <Hamburger /> */}</div>
         </>
       ) : (
         <>
           <div className=" flex gap-2 mr-5">
-            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+            <button
+              onClick={() => {
+                Navigate("/login");
+              }}
+              className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            >
               로그인
             </button>
-            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+            <button
+              onClick={() => {
+                Navigate("signup");
+              }}
+              className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            >
               회원가입
             </button>
           </div>
