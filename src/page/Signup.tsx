@@ -35,19 +35,20 @@ const Signup = () => {
         },
       },
     });
+
     if (error) {
       console.error("supabase auth error", error);
     }
 
-    console.log(data);
     const { error: Errordata } = await supabase
       .from("user")
-      .insert([{ id: data.user?.id, nickname: nickname, email: email }])
-      .select();
+      .insert([{ id: data.user?.id, nickname: nickname, email: email }]);
+
     if (Errordata) {
       alert(`유저 생성에 실패했습니다. ${Errordata.message}`);
       return;
     }
+    alert("회원가입에 성공했습니다~!");
     navigate("/");
   };
 
